@@ -6,7 +6,7 @@
 /*   By: zogrir <zogrir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:33:45 by zogrir            #+#    #+#             */
-/*   Updated: 2024/11/26 14:26:14 by zogrir           ###   ########.fr       */
+/*   Updated: 2024/11/28 18:08:06 by zogrir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ size_t	ft_strlen(const char *s)
 	}
 	return (i);
 }
-
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -44,10 +43,6 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)(s + i));
 	return (NULL);
 }
-
-
-
-
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
@@ -76,6 +71,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	destination[i] = '\0';
 	return (destination);
 }
+
 size_t	ft_strlcpy(char *dest, char *src, size_t size)
 {
 	size_t			st_len;
@@ -99,33 +95,18 @@ char	*ft_strdup(const char *s)
 {
 	char			*destination;
 	unsigned int	s_len;
+	unsigned int	i;
 
+	i = 0;
 	s_len = ft_strlen(s);
 	destination = (char *)malloc(s_len + 1);
 	if (!destination)
 		return (NULL);
-	ft_memcpy (destination, s, s_len);
+	while (i < s_len)
+	{
+		destination[i] = s[i];
+		i++;
+	}
 	destination[s_len] = '\0';
 	return (destination);
-}
-
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	unsigned char		*destination;
-	unsigned char		*source;
-	unsigned int		i;
-
-	i = 0;
-	destination = (unsigned char *)dst;
-	source = (unsigned char *)src;
-	if (!dst && !src)
-		return (NULL);
-	while (n > 0)
-	{
-		destination[i] = source[i];
-		i++;
-		n--;
-	}
-	return (dst);
 }
