@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zogrir <zogrir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 09:33:30 by zogrir            #+#    #+#             */
-/*   Updated: 2024/11/30 01:25:35 by zogrir           ###   ########.fr       */
+/*   Created: 2024/11/30 03:53:29 by zogrir            #+#    #+#             */
+/*   Updated: 2024/11/30 04:13:46 by zogrir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_read_store(int fd, char *leftover)
 {
@@ -80,23 +80,23 @@ char	*ft_update_leftover(char *leftover)
 
 char	*get_next_line(int fd)
 {
-	static char		*leftover;
+	static char		*leftover[OPEN_MAX];
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > OPEN_MAX)
 		return (NULL);
-	leftover = ft_read_store(fd, leftover);
-	if (!leftover)
+	leftover[fd] = ft_read_store(fd, leftover[fd]);
+	if (!leftover[fd])
 	{
 		return (NULL);
 	}
-	line = ft_extract_line(leftover);
+	line = ft_extract_line(leftover[fd]);
 	if (!line)
 	{
-		free (leftover);
-		leftover = NULL;
+		free (leftover[fd]);
+		leftover[fd] = NULL;
 		return (NULL);
 	}
-	leftover = ft_update_leftover(leftover);
+	leftover[fd] = ft_update_leftover(leftover[fd]);
 	return (line);
 }
