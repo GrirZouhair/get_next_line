@@ -6,13 +6,12 @@
 /*   By: zogrir <zogrir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 03:53:39 by zogrir            #+#    #+#             */
-/*   Updated: 2024/11/30 04:01:46 by zogrir           ###   ########.fr       */
+/*   Updated: 2024/12/05 21:32:45 by zogrir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_BONUS_H
 # define GET_NEXT_LINE_BONUS_H
-# include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>

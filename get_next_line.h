@@ -6,13 +6,12 @@
 /*   By: zogrir <zogrir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:33:36 by zogrir            #+#    #+#             */
-/*   Updated: 2024/11/28 18:06:50 by zogrir           ###   ########.fr       */
+/*   Updated: 2024/12/05 21:36:45 by zogrir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
 

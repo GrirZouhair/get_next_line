@@ -6,7 +6,7 @@
 /*   By: zogrir <zogrir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 03:53:29 by zogrir            #+#    #+#             */
-/*   Updated: 2024/11/30 04:13:46 by zogrir           ###   ########.fr       */
+/*   Updated: 2024/12/08 18:42:09 by zogrir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,36 @@
 
 char	*ft_read_store(int fd, char *leftover)
 {
-	char		buffer[BUFFER_SIZE + 1];
+	char		*buffer;
 	ssize_t		byte_read;
 	char		*tmp;
 
+	byte_read = 1;
 	if (!leftover)
+		leftover = ft_strdup("");
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
 	{
-		leftover = malloc(1);
-		if (!leftover)
-			return (NULL);
-		leftover[0] = '\0';
+		free(leftover);
+		return (NULL);
 	}
-	while (!ft_strchr(leftover, '\n'))
+	while ( byte_read > 0 && !ft_strchr(leftover, '\n'))
 	{
 		byte_read = read(fd, buffer, BUFFER_SIZE);
 		if (byte_read == -1)
-			return (free(leftover), NULL);
+		{
+			free(buffer);
+			free(leftover);
+			return (NULL);
+		}
 		if (byte_read == 0)
-			return (leftover);
+			break ;
 		buffer[byte_read] = '\0';
 		tmp = ft_strjoin(leftover, buffer);
 		free(leftover);
 		leftover = tmp;
 	}
+	free(buffer);
 	return (leftover);
 }
 
@@ -67,7 +74,7 @@ char	*ft_update_leftover(char *leftover)
 	i = 0;
 	while (leftover[i] && leftover[i] != '\n')
 		i++;
-	if (!leftover[i])
+	if (!leftover[i] || !leftover)
 	{
 		free(leftover);
 		leftover = NULL;
@@ -83,13 +90,11 @@ char	*get_next_line(int fd)
 	static char		*leftover[OPEN_MAX];
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || fd > OPEN_MAX)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >=  2147483647 || fd > OPEN_MAX)
 		return (NULL);
 	leftover[fd] = ft_read_store(fd, leftover[fd]);
 	if (!leftover[fd])
-	{
 		return (NULL);
-	}
 	line = ft_extract_line(leftover[fd]);
 	if (!line)
 	{

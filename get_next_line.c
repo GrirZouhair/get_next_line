@@ -6,40 +6,49 @@
 /*   By: zogrir <zogrir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:33:30 by zogrir            #+#    #+#             */
-/*   Updated: 2024/11/30 01:25:35 by zogrir           ###   ########.fr       */
+/*   Updated: 2024/12/08 18:39:37 by zogrir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+
 char	*ft_read_store(int fd, char *leftover)
 {
-	char		buffer[BUFFER_SIZE + 1];
+	char		*buffer;
 	ssize_t		byte_read;
 	char		*tmp;
 
+	byte_read = 1;
 	if (!leftover)
+		leftover = ft_strdup("");
+	if (!leftover)
+		return (NULL);
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
 	{
-		leftover = malloc(1);
-		if (!leftover)
-			return (NULL);
-		leftover[0] = '\0';
+		free(leftover);
+		return (NULL);
 	}
-	while (!ft_strchr(leftover, '\n'))
+	while ( byte_read > 0 && !ft_strchr(leftover, '\n'))
 	{
 		byte_read = read(fd, buffer, BUFFER_SIZE);
 		if (byte_read == -1)
-			return (free(leftover), NULL);
+		{
+			free(buffer);
+			free(leftover);
+			return (NULL);
+		}
 		if (byte_read == 0)
-			return (leftover);
+			break;
 		buffer[byte_read] = '\0';
 		tmp = ft_strjoin(leftover, buffer);
 		free(leftover);
 		leftover = tmp;
 	}
+	free(buffer);
 	return (leftover);
 }
-
 char	*ft_extract_line(char *leftover)
 {
 	size_t		i;
@@ -83,13 +92,11 @@ char	*get_next_line(int fd)
 	static char		*leftover;
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= 2147483647)
 		return (NULL);
 	leftover = ft_read_store(fd, leftover);
 	if (!leftover)
-	{
 		return (NULL);
-	}
 	line = ft_extract_line(leftover);
 	if (!line)
 	{
