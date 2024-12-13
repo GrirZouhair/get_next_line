@@ -6,7 +6,7 @@
 /*   By: zogrir <zogrir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 03:53:29 by zogrir            #+#    #+#             */
-/*   Updated: 2024/12/08 18:42:09 by zogrir           ###   ########.fr       */
+/*   Updated: 2024/12/13 15:56:58 by zogrir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,12 @@ char	*ft_read_store(int fd, char *leftover)
 		leftover = ft_strdup("");
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
-	{
-		free(leftover);
-		return (NULL);
-	}
-	while ( byte_read > 0 && !ft_strchr(leftover, '\n'))
+		return (free(leftover), NULL);
+	while (byte_read > 0 && !ft_strchr(leftover, '\n'))
 	{
 		byte_read = read(fd, buffer, BUFFER_SIZE);
 		if (byte_read == -1)
-		{
-			free(buffer);
-			free(leftover);
-			return (NULL);
-		}
+			return (free(buffer), free(leftover), NULL);
 		if (byte_read == 0)
 			break ;
 		buffer[byte_read] = '\0';
@@ -90,7 +83,8 @@ char	*get_next_line(int fd)
 	static char		*leftover[OPEN_MAX];
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >=  2147483647 || fd > OPEN_MAX)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= 2147483647
+		|| fd > OPEN_MAX)
 		return (NULL);
 	leftover[fd] = ft_read_store(fd, leftover[fd]);
 	if (!leftover[fd])
