@@ -6,7 +6,7 @@
 /*   By: zogrir <zogrir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 03:53:29 by zogrir            #+#    #+#             */
-/*   Updated: 2024/12/13 15:56:58 by zogrir           ###   ########.fr       */
+/*   Updated: 2024/12/16 11:41:28 by zogrir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*ft_read_store(int fd, char *leftover)
 {
 	char		*buffer;
-	ssize_t		byte_read;
+	int		byte_read;
 	char		*tmp;
 
 	byte_read = 1;
@@ -83,19 +83,12 @@ char	*get_next_line(int fd)
 	static char		*leftover[OPEN_MAX];
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= 2147483647
-		|| fd > OPEN_MAX)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > OPEN_MAX)
 		return (NULL);
 	leftover[fd] = ft_read_store(fd, leftover[fd]);
 	if (!leftover[fd])
 		return (NULL);
 	line = ft_extract_line(leftover[fd]);
-	if (!line)
-	{
-		free (leftover[fd]);
-		leftover[fd] = NULL;
-		return (NULL);
-	}
 	leftover[fd] = ft_update_leftover(leftover[fd]);
 	return (line);
 }

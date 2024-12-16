@@ -6,7 +6,7 @@
 /*   By: zogrir <zogrir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:33:30 by zogrir            #+#    #+#             */
-/*   Updated: 2024/12/13 17:34:41 by zogrir           ###   ########.fr       */
+/*   Updated: 2024/12/16 11:23:21 by zogrir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 char	*ft_read_store(int fd, char *leftover)
 {
 	char		*buffer;
-	ssize_t		byte_read;
+	int			byte_read;
 	char		*tmp;
 
 	byte_read = 1;
 	if (!leftover)
 		leftover = ft_strdup("");
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	buffer = malloc(sizeof(char) * (size_t)(BUFFER_SIZE + 1));
 	if (!buffer)
 		return (free(leftover), NULL);
 	while (byte_read > 0 && !ft_strchr(leftover, '\n'))
@@ -36,8 +36,7 @@ char	*ft_read_store(int fd, char *leftover)
 		free(leftover);
 		leftover = tmp;
 	}
-	free(buffer);
-	return (leftover);
+	return (free(buffer), leftover);
 }
 
 char	*ft_extract_line(char *leftover)
@@ -68,14 +67,9 @@ char	*ft_update_leftover(char *leftover)
 	while (leftover[i] && leftover[i] != '\n')
 		i++;
 	if (!leftover[i] || !leftover)
-	{
-		free(leftover);
-		leftover = NULL;
-		return (NULL);
-	}
+		return (free(leftover), NULL);
 	new_leftover = ft_strdup(leftover + i + 1);
-	free(leftover);
-	return (new_leftover);
+	return (free(leftover), new_leftover);
 }
 
 char	*get_next_line(int fd)
@@ -83,18 +77,12 @@ char	*get_next_line(int fd)
 	static char		*leftover;
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= 2147483647)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	leftover = ft_read_store(fd, leftover);
 	if (!leftover)
 		return (NULL);
 	line = ft_extract_line(leftover);
-	if (!line)
-	{
-		free (leftover);
-		leftover = NULL;
-		return (NULL);
-	}
 	leftover = ft_update_leftover(leftover);
 	return (line);
 }
